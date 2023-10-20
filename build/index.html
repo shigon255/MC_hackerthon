@@ -46,7 +46,7 @@
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div>
     <p id="load">Firebase SDK Loading&hellip;</p>
-
+    
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         const loadEl = document.querySelector('#load');
@@ -83,7 +83,38 @@
           console.error(e);
           loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
+        var test = async function(){
+          const url = 'https://api.one.blendvision.com/bv/cms/v1/vods';
+          const options = {
+            method: 'GET',
+            headers: {'x-bv-org-id': 'e28bfe29-6bd1-425d-ad31-60b59ecd2028', Accept: 'application/json', authorization: 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmJpdCIsInN1YiI6IjA5OWNjMzc2LWZhMjUtNDk0Yi05ODY2LThkZWUwMDRhNmVkMCIsImV4cCI6MTcyOTQzOTk5OSwianRpIjoiMjkyNWMzZmYtNTgwOC00M2M4LTlhMjUtYTk3ODIzZjFlYzUwIiwidG9rZW5fdXNlIjoiYXBpX2FjY2VzcyIsImVtYWlsIjoicmF5NTIzMzUxMkBnbWFpbC5jb20ifQ.aezV-vJ1xOpNCCbcEv9GS7HAoiWDWVUkzsylEAEzOfDXgdF1RnDJVS2WDmOsBxBivGYjTYRXk_UL_RSYEg6hB1RnoloAeROjxLjLeC5o7vz-yisMQiAtmE6EUTjaHnkgaTWBWVBAURj_ug9ZjgTeRydlvOriC2xbYgSQRF7kEVKdoauB_PuJGAjnVBXb2kOIhQX6TcEzZwNPhbFfIY8_-1WkCBrivfnXlkFFr0s50hMWi9pCLxTuHIwMyWRjhWpKEuGHMvyC4EMfZmWJdbk8AKOODGheuCwmdXBhBxqBJzsern3jp-JiPx_LBG2NA72qLfS1zanymREjErpb934yS7rJztlj2UCBXJzbgNttbDDGbuYro1e0jzjhdbeaZiWxQqf526H5pIaQmbkWoLANLI9IKBnQbHkncuL85B511TRqZdLLZ7hLHoGiYQARKpbaNhYukX-7Bc0HS3qtk5IGkr16SiDRR25AD4QideDYp5wJ793h6Tn8yWvKaSlxm1SgUR5r2CKQIlPYrukYOfLZhaafN3k3PlSKMgaharhnBQikw4c7u9gKnzeV-P05GsbNoqF6pq-8GmQ-2UR42XLlFCaeXKK6z1JjODY23MFrut8wvPD6jMDneYdVcGw1o8AEEjQ6dwNlwV1VRc6jpY3Y-z_SAPEIDpkIs_6KHkn2sfs'}
+          };
+
+          try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+            console.log(data);
+          } catch (error) {
+            console.error(error);
+          }
+        }
+        test();
+        
       });
     </script>
+    <style>
+      .center-button {
+        text-align: center;
+      }
+      .center-button a {
+        display: inline-block;
+      }
+    </style>
+    
+    <div class="center-button">
+      <a href="https://www.google.com">
+        <button>前往另一个网址</button>
+      </a>
+    </div>
   </body>
 </html>
