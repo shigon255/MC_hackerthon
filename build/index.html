@@ -84,14 +84,41 @@
           loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
         var test = async function(){
-          const url = 'https://api.one.blendvision.com/bv/cms/v1/vods';
+          // const url = 'https://api.one-stage.kkstream.io/bv/cms/v1/vods';
+          // const options = {
+          //   method: 'GET',
+          //   headers: {
+          //     'x-bv-org-id': 'e28bfe29-6bd1-425d-ad31-60b59ecd2028',
+          //     Accept: 'application/json',
+          //     authorization: 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmJpdCIsInN1YiI6IjMxYWRmZjNjLWYyOTQtNDI0Ny04MzY2LWQ5MzQ0NmIzMWJhMyIsImV4cCI6MTcyOTQzOTk5OSwianRpIjoiM2I2YzhmYTEtYTdjMS00OGViLTk0ZDEtMjA2ZTIzOGZlZjIyIiwidG9rZW5fdXNlIjoiYXBpX2FjY2VzcyIsImVtYWlsIjoicmF5NTIzMzUxMi5jczEwQG55Y3UuZWR1LnR3In0.TlEgJv1ZVSrLTN36iUUAv8zIN2ywS0Qafh3hxkieNyJqAV0o_in8FQyHqfP22yNQ4aQ9326ypwUzLuhnpOHZUrO3gVJQLMXW_05YhR8TMwj3P9TVFo6DXq-SZxJqdujbWnGfo3lYjlcD50Cj8PjzRCUUw8R8BHNvVl1msuiyZo5HNFWKNHXkwgnTn4pCxFxVlvgaGvUrJ1w2u9egjdaiJFCvJf0ID0VfmvQfbq_tDYBpuvyfmRrHEQ9T7vr_U1lZITGDY5_OYut0aHDXYrwptwXBUdbdsbRjOiarVo6m50ZprwxRqdost3DNca3sNCp7ewajcygXJIMbb0_GepDB-L5KsolldhOb66g5RygkzoWYQQFQ2exjCiwGnz7mb5cUQJGYz5CckBQC51OvKQGIM4ZpeeH4U0413FqVRMgJNdr0RTRWeKILkSrjZ2J2osyT01L9TuLzTNTTExLHrYQaE2P9MSuu3KZOung-WKU2fkJF12uTGqzMV9rucBf4Gs93ThqHHI66p2U64py1LAjoQ2u7v4w-cvEKXyNqPoSO_XvQUVqZ7iOAe6zXTHcPZ2LRcZFS8FPyz58f0988sx_z6KaLCSUarks1Vi-8NrBS-osO19jSHEsxXf-H2E7eV6A3Tb5DTZw_7Wn3am8tUrjoJ43J5QOyyZUZdu1eiG5g954'
+          //   },
+          //   body: {
+          //     'current_page': 3
+          //   }
+          // };
+
+          // try {
+          //   const response = await fetch(url, options);
+          //   const data = await response.json();
+          //   console.log(data);
+          // } catch (error) {
+          //   console.error(error);
+          // }
+          const url = 'https://api.one-stage.kkstream.io/bv/cms/v1/vods';
+          const queryParams = { current_page: 3, items_per_page: 10};
+          const urlWithParams = new URL(url);
+          urlWithParams.search = new URLSearchParams(queryParams).toString();
           const options = {
             method: 'GET',
-            headers: {'x-bv-org-id': 'e28bfe29-6bd1-425d-ad31-60b59ecd2028', Accept: 'application/json', authorization: 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmJpdCIsInN1YiI6IjA5OWNjMzc2LWZhMjUtNDk0Yi05ODY2LThkZWUwMDRhNmVkMCIsImV4cCI6MTcyOTQzOTk5OSwianRpIjoiMjkyNWMzZmYtNTgwOC00M2M4LTlhMjUtYTk3ODIzZjFlYzUwIiwidG9rZW5fdXNlIjoiYXBpX2FjY2VzcyIsImVtYWlsIjoicmF5NTIzMzUxMkBnbWFpbC5jb20ifQ.aezV-vJ1xOpNCCbcEv9GS7HAoiWDWVUkzsylEAEzOfDXgdF1RnDJVS2WDmOsBxBivGYjTYRXk_UL_RSYEg6hB1RnoloAeROjxLjLeC5o7vz-yisMQiAtmE6EUTjaHnkgaTWBWVBAURj_ug9ZjgTeRydlvOriC2xbYgSQRF7kEVKdoauB_PuJGAjnVBXb2kOIhQX6TcEzZwNPhbFfIY8_-1WkCBrivfnXlkFFr0s50hMWi9pCLxTuHIwMyWRjhWpKEuGHMvyC4EMfZmWJdbk8AKOODGheuCwmdXBhBxqBJzsern3jp-JiPx_LBG2NA72qLfS1zanymREjErpb934yS7rJztlj2UCBXJzbgNttbDDGbuYro1e0jzjhdbeaZiWxQqf526H5pIaQmbkWoLANLI9IKBnQbHkncuL85B511TRqZdLLZ7hLHoGiYQARKpbaNhYukX-7Bc0HS3qtk5IGkr16SiDRR25AD4QideDYp5wJ793h6Tn8yWvKaSlxm1SgUR5r2CKQIlPYrukYOfLZhaafN3k3PlSKMgaharhnBQikw4c7u9gKnzeV-P05GsbNoqF6pq-8GmQ-2UR42XLlFCaeXKK6z1JjODY23MFrut8wvPD6jMDneYdVcGw1o8AEEjQ6dwNlwV1VRc6jpY3Y-z_SAPEIDpkIs_6KHkn2sfs'}
+            headers: {
+              'x-bv-org-id': 'e28bfe29-6bd1-425d-ad31-60b59ecd2028',
+              Accept: 'application/json',
+              authorization: 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmJpdCIsInN1YiI6IjMxYWRmZjNjLWYyOTQtNDI0Ny04MzY2LWQ5MzQ0NmIzMWJhMyIsImV4cCI6MTcyOTQzOTk5OSwianRpIjoiM2I2YzhmYTEtYTdjMS00OGViLTk0ZDEtMjA2ZTIzOGZlZjIyIiwidG9rZW5fdXNlIjoiYXBpX2FjY2VzcyIsImVtYWlsIjoicmF5NTIzMzUxMi5jczEwQG55Y3UuZWR1LnR3In0.TlEgJv1ZVSrLTN36iUUAv8zIN2ywS0Qafh3hxkieNyJqAV0o_in8FQyHqfP22yNQ4aQ9326ypwUzLuhnpOHZUrO3gVJQLMXW_05YhR8TMwj3P9TVFo6DXq-SZxJqdujbWnGfo3lYjlcD50Cj8PjzRCUUw8R8BHNvVl1msuiyZo5HNFWKNHXkwgnTn4pCxFxVlvgaGvUrJ1w2u9egjdaiJFCvJf0ID0VfmvQfbq_tDYBpuvyfmRrHEQ9T7vr_U1lZITGDY5_OYut0aHDXYrwptwXBUdbdsbRjOiarVo6m50ZprwxRqdost3DNca3sNCp7ewajcygXJIMbb0_GepDB-L5KsolldhOb66g5RygkzoWYQQFQ2exjCiwGnz7mb5cUQJGYz5CckBQC51OvKQGIM4ZpeeH4U0413FqVRMgJNdr0RTRWeKILkSrjZ2J2osyT01L9TuLzTNTTExLHrYQaE2P9MSuu3KZOung-WKU2fkJF12uTGqzMV9rucBf4Gs93ThqHHI66p2U64py1LAjoQ2u7v4w-cvEKXyNqPoSO_XvQUVqZ7iOAe6zXTHcPZ2LRcZFS8FPyz58f0988sx_z6KaLCSUarks1Vi-8NrBS-osO19jSHEsxXf-H2E7eV6A3Tb5DTZw_7Wn3am8tUrjoJ43J5QOyyZUZdu1eiG5g954'
+            }
           };
 
           try {
-            const response = await fetch(url, options);
+            const response = await fetch(urlWithParams, options);
             const data = await response.json();
             console.log(data);
           } catch (error) {
