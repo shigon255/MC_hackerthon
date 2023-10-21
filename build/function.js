@@ -58,3 +58,4 @@ var getToken = async function(resource_id, resource_type){
     console.error(error);
   }
 }
+
