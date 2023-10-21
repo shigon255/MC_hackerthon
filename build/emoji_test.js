@@ -25,10 +25,17 @@ export async function emoji(){
     const detectionsWithExpressions = await faceapi
           .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
           .withFaceExpressions();
+          let expressions;
         if (detectionsWithExpressions.length > 0) {
-            console.log(detectionsWithExpressions.map(detectionsWithExpression).expressions);
+            for (let i = 0; i < detectionsWithExpressions.length ; i++) {
+                const Array = Object.entries(detectionsWithExpressions[i].expressions);
+                const expressionsArray = Array.map((j) => j[0]);
+                const scoresArray = Array.map((i) => i[1]);
+                const max = Math.max.apply(null, scoresArray);
+                const index = scoresArray.findIndex((score) => score === max);
+                const expression = expressionsArray[index];
+                expressions.push(expression);
+            }
         }
-    let images;
-    expressions.forEach((element) => images.push(`/emojis/`+element+`.png`));
-    return images;
+    return expressions;
 };
