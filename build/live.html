@@ -68,8 +68,9 @@
     </div> -->
     <!-- <p id="load">Firebase SDK Loading&hellip;</p> -->
 
-    <div class="centered-text" id="RMTP_URL"></div>
-    <div class="centered-text" id="Stream_key"></div>
+    <div class="iframe-container">
+        <iframe id="iframe" src="" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
+    </div>
     <script>
       // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
@@ -102,28 +103,17 @@
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
 
-          // save_live
-          const db = app.database();
-          console.log("test");
-          db.ref("live_name_" + localStorage.getItem("UID")).once("value")
-          .then((snapshot) => {
-            const data = snapshot.val();
-            async function create_live_and_save_and_get_id(){
-              // just used to save live name
-              db.ref("live_name_" + localStorage.getItem("UID")).remove();
-              const live = await create_live(data.live_name);
-              console.log(live);
-              console.log(JSON.stringify(live));
-              db.ref("live_" + localStorage.getItem("UID")).set(JSON.stringify(live));
-              document.getElementById("RMTP_URL").textContent = "RMTP URL: " + live.setup.rtmp.links.url;
-              document.getElementById("Stream_key").textContent = "Stream key: " + live.setup.rtmp.links.stream_key;
-            }
-            const id = create_live_and_save_and_get_id();
-            localStorage.setItem("live_id_" + localStorage.getItem("UID"), id);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+          // live JSON string = live_<UID> (Save in cloud)
+          // live id = live_id_<UID> (Save in localStorage)
+          // UID (Save in localStorage)
+          
+          async function show_live_iframe(live_id){
+            const token = await getToken(live_id, 'RESOURCE_TYPE_LIVE');
+            var iframe = document.getElementById(iframeId);
+            const showroom_base_url = "https://showroom.one-stage.kkstream.io/embed?token="
+            iframe.src = showroom_base_url + token;
+          }
+          
           //loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
           console.error(e);
@@ -132,6 +122,16 @@
       });
     </script>
 
+    <!-- show iframe -->
+    <script>
+      window.addEventListener('message', event => {
+        if (event.data.command === 'ping') {
+          Array.from(document.querySelectorAll('iframe')).forEach(iframe => 
+            iframe?.contentWindow?.postMessage({ command: 'pong' }, '*')
+          );
+        }
+      });
+    </script>
     <!--other js scripts-->
     <script src="macro.js"></script>
     <script src="function.js"></script>
@@ -156,7 +156,6 @@
                 const live = await get_resource("live_" + localStorage.getItem("UID"), 'RESOURCE_TYPE_LIVE');
                 status = live.status;
             }
-            const res = await start_live(localStorage.getItem("live_id_" + localStorage.getItem("UID")))
             window.location.href = "live.html";
         }
         check_status_and_jump();

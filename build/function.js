@@ -83,3 +83,26 @@ var create_live = async function(live_name){
     console.error(error);
   }
 }
+
+var start_live = async function(live_id){
+  const start_live_api = 'bv/cms/v1/lives/' + live_id + ':start';
+  const url = concat_url(api_base_url, start_live_api);
+  const options = {
+    method: 'POST',
+    headers: {
+      'x-bv-org-id': org_id,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      authorization: api_token
+    },
+    body: '{}'
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}

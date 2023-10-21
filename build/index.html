@@ -181,7 +181,7 @@
           live_name: live_name
         }
         console.log(data);
-        db.ref("live_name").set(data).then(() => {
+        db.ref("live_name_" + localStorage.getItem("UID")).set(data).then(() => {
           window.location.href = "check_OBS.html";
         }).catch(error => {
           console.error("写入数据时出错：", error);
