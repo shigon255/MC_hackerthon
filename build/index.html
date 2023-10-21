@@ -111,21 +111,17 @@
     </div>
     <script>
       // TODO: use async function to do all process
-      async function callAsync() {
+      async function show_vod() {
           // get vods' data
-          const vod_data = await getVod();
-          // get first vod's resource id
-          vod_id = vod_data.vods[0].id;
+          const vod = await get_resource('LCD Screen Test_1080p.mp4', 'RESOURCE_TYPE_VOD');
           // get firs vod's token
-          const token_data = await getToken(vod_id);
-          // get iframe element in HTML
+          const token = await getToken(vod.id, 'RESOURCE_TYPE_VOD');
+          // revise iframe element in HTML
           var iframe = document.getElementById("vodiframe");
-          // note: need to use kkstream.io instead of original api base url
-          //console.log("https://showroom.one-stage.kkstream.io/embed?token=" + token_data.token);
           const showroom_base_url = "https://showroom.one-stage.kkstream.io/embed?token="
-          iframe.src = showroom_base_url + token_data.token;
+          iframe.src = showroom_base_url + token;
         }
-        callAsync();
+        show_vod();
     </script>
 
     <!-- show iframe -->
