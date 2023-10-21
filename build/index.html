@@ -37,17 +37,33 @@
         body { border-top: 16px solid #ffa100; }
       }
     </style>
+
+    <style>
+      .center-button {
+        text-align: center;
+      }
+      .center-button a {
+        display: inline-block;
+      }
+      .iframe-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* 使容器占据整个视口高度，可以根据需要进行调整 */
+      }
+    </style>
   </head>
   <body>
-    <div id="message">
+    <!-- Firebase message -->
+    <!-- <div id="message">
       <h2>Welcome</h2>
       <h1>Firebase Hosting Setup Complete</h1>
       <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
+    </div> -->
     <p id="load">Firebase SDK Loading&hellip;</p>
-    <iframe id="vodiframe" src="" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
     <script>
+      // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
         const loadEl = document.querySelector('#load');
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
@@ -64,7 +80,6 @@
         // firebase.performance(); // call to activate
         //
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        console.log("hahaha");
         try {
           let app = firebase.app();
           let features = [
@@ -83,91 +98,37 @@
           console.error(e);
           loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
-        var getVod = async function(){
-          // const url = 'https://api.one-stage.kkstream.io/bv/cms/v1/vods';
-          // const options = {
-          //   method: 'GET',
-          //   headers: {
-          //     'x-bv-org-id': 'e28bfe29-6bd1-425d-ad31-60b59ecd2028',
-          //     Accept: 'application/json',
-          //     authorization: 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmJpdCIsInN1YiI6IjMxYWRmZjNjLWYyOTQtNDI0Ny04MzY2LWQ5MzQ0NmIzMWJhMyIsImV4cCI6MTcyOTQzOTk5OSwianRpIjoiM2I2YzhmYTEtYTdjMS00OGViLTk0ZDEtMjA2ZTIzOGZlZjIyIiwidG9rZW5fdXNlIjoiYXBpX2FjY2VzcyIsImVtYWlsIjoicmF5NTIzMzUxMi5jczEwQG55Y3UuZWR1LnR3In0.TlEgJv1ZVSrLTN36iUUAv8zIN2ywS0Qafh3hxkieNyJqAV0o_in8FQyHqfP22yNQ4aQ9326ypwUzLuhnpOHZUrO3gVJQLMXW_05YhR8TMwj3P9TVFo6DXq-SZxJqdujbWnGfo3lYjlcD50Cj8PjzRCUUw8R8BHNvVl1msuiyZo5HNFWKNHXkwgnTn4pCxFxVlvgaGvUrJ1w2u9egjdaiJFCvJf0ID0VfmvQfbq_tDYBpuvyfmRrHEQ9T7vr_U1lZITGDY5_OYut0aHDXYrwptwXBUdbdsbRjOiarVo6m50ZprwxRqdost3DNca3sNCp7ewajcygXJIMbb0_GepDB-L5KsolldhOb66g5RygkzoWYQQFQ2exjCiwGnz7mb5cUQJGYz5CckBQC51OvKQGIM4ZpeeH4U0413FqVRMgJNdr0RTRWeKILkSrjZ2J2osyT01L9TuLzTNTTExLHrYQaE2P9MSuu3KZOung-WKU2fkJF12uTGqzMV9rucBf4Gs93ThqHHI66p2U64py1LAjoQ2u7v4w-cvEKXyNqPoSO_XvQUVqZ7iOAe6zXTHcPZ2LRcZFS8FPyz58f0988sx_z6KaLCSUarks1Vi-8NrBS-osO19jSHEsxXf-H2E7eV6A3Tb5DTZw_7Wn3am8tUrjoJ43J5QOyyZUZdu1eiG5g954'
-          //   },
-          //   body: {
-          //     'current_page': 3
-          //   }
-          // };
-
-          // try {
-          //   const response = await fetch(url, options);
-          //   const data = await response.json();
-          //   console.log(data);
-          // } catch (error) {
-          //   console.error(error);
-          // }
-          const url = 'https://api.one-stage.kkstream.io/bv/cms/v1/vods';
-          const queryParams = { current_page: 1, items_per_page: 1};
-          const urlWithParams = new URL(url);
-          urlWithParams.search = new URLSearchParams(queryParams).toString();
-          const options = {
-            method: 'GET',
-            headers: {
-              'x-bv-org-id': 'e28bfe29-6bd1-425d-ad31-60b59ecd2028',
-              Accept: 'application/json',
-              authorization: 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmJpdCIsInN1YiI6IjMxYWRmZjNjLWYyOTQtNDI0Ny04MzY2LWQ5MzQ0NmIzMWJhMyIsImV4cCI6MTcyOTQzOTk5OSwianRpIjoiM2I2YzhmYTEtYTdjMS00OGViLTk0ZDEtMjA2ZTIzOGZlZjIyIiwidG9rZW5fdXNlIjoiYXBpX2FjY2VzcyIsImVtYWlsIjoicmF5NTIzMzUxMi5jczEwQG55Y3UuZWR1LnR3In0.TlEgJv1ZVSrLTN36iUUAv8zIN2ywS0Qafh3hxkieNyJqAV0o_in8FQyHqfP22yNQ4aQ9326ypwUzLuhnpOHZUrO3gVJQLMXW_05YhR8TMwj3P9TVFo6DXq-SZxJqdujbWnGfo3lYjlcD50Cj8PjzRCUUw8R8BHNvVl1msuiyZo5HNFWKNHXkwgnTn4pCxFxVlvgaGvUrJ1w2u9egjdaiJFCvJf0ID0VfmvQfbq_tDYBpuvyfmRrHEQ9T7vr_U1lZITGDY5_OYut0aHDXYrwptwXBUdbdsbRjOiarVo6m50ZprwxRqdost3DNca3sNCp7ewajcygXJIMbb0_GepDB-L5KsolldhOb66g5RygkzoWYQQFQ2exjCiwGnz7mb5cUQJGYz5CckBQC51OvKQGIM4ZpeeH4U0413FqVRMgJNdr0RTRWeKILkSrjZ2J2osyT01L9TuLzTNTTExLHrYQaE2P9MSuu3KZOung-WKU2fkJF12uTGqzMV9rucBf4Gs93ThqHHI66p2U64py1LAjoQ2u7v4w-cvEKXyNqPoSO_XvQUVqZ7iOAe6zXTHcPZ2LRcZFS8FPyz58f0988sx_z6KaLCSUarks1Vi-8NrBS-osO19jSHEsxXf-H2E7eV6A3Tb5DTZw_7Wn3am8tUrjoJ43J5QOyyZUZdu1eiG5g954'
-            }
-          };
-          try {
-            const response = await fetch(urlWithParams, options);
-            const data = await response.json();
-            return data;
-          } catch (error) {
-            console.error(error);
-          }
-
-          
-        }
-        
-        var getToken = async function(vod_id){
-          console.log('{"resource_id":"' + vod_id + '","resource_type":"RESOURCE_TYPE_VOD","customer_id":"","customer_name":""}');
-          const url = 'https://api.one-stage.kkstream.io/bv/cms/v1/resources/tokens';
-          const options = {
-            method: 'POST',
-            headers: {
-              'x-bv-org-id': 'e28bfe29-6bd1-425d-ad31-60b59ecd2028',
-              'Content-Type': 'application/json',
-              Accept: 'application/json',
-              authorization: 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJvcmJpdCIsInN1YiI6IjMxYWRmZjNjLWYyOTQtNDI0Ny04MzY2LWQ5MzQ0NmIzMWJhMyIsImV4cCI6MTcyOTQzOTk5OSwianRpIjoiM2I2YzhmYTEtYTdjMS00OGViLTk0ZDEtMjA2ZTIzOGZlZjIyIiwidG9rZW5fdXNlIjoiYXBpX2FjY2VzcyIsImVtYWlsIjoicmF5NTIzMzUxMi5jczEwQG55Y3UuZWR1LnR3In0.TlEgJv1ZVSrLTN36iUUAv8zIN2ywS0Qafh3hxkieNyJqAV0o_in8FQyHqfP22yNQ4aQ9326ypwUzLuhnpOHZUrO3gVJQLMXW_05YhR8TMwj3P9TVFo6DXq-SZxJqdujbWnGfo3lYjlcD50Cj8PjzRCUUw8R8BHNvVl1msuiyZo5HNFWKNHXkwgnTn4pCxFxVlvgaGvUrJ1w2u9egjdaiJFCvJf0ID0VfmvQfbq_tDYBpuvyfmRrHEQ9T7vr_U1lZITGDY5_OYut0aHDXYrwptwXBUdbdsbRjOiarVo6m50ZprwxRqdost3DNca3sNCp7ewajcygXJIMbb0_GepDB-L5KsolldhOb66g5RygkzoWYQQFQ2exjCiwGnz7mb5cUQJGYz5CckBQC51OvKQGIM4ZpeeH4U0413FqVRMgJNdr0RTRWeKILkSrjZ2J2osyT01L9TuLzTNTTExLHrYQaE2P9MSuu3KZOung-WKU2fkJF12uTGqzMV9rucBf4Gs93ThqHHI66p2U64py1LAjoQ2u7v4w-cvEKXyNqPoSO_XvQUVqZ7iOAe6zXTHcPZ2LRcZFS8FPyz58f0988sx_z6KaLCSUarks1Vi-8NrBS-osO19jSHEsxXf-H2E7eV6A3Tb5DTZw_7Wn3am8tUrjoJ43J5QOyyZUZdu1eiG5g954'
-            },
-            body: '{"resource_id":"' + vod_id + '","resource_type":"RESOURCE_TYPE_VOD","customer_id":"","customer_name":""}'
-          };
-
-          try {
-            const response = await fetch(url, options);
-            const data = await response.json();
-            return data;
-          } catch (error) {
-            console.error(error);
-          }
-        }
-        // TODO: use async function to do all process
-        async function callAsync() {
-          const vod_data = await getVod();
-          //console.log(vod_data);
-          vod_id = vod_data.vods[0].id;
-          console.log("vod_id");
-          console.log(vod_id);
-          const token_data = await getToken(vod_id);
-          console.log(token_data);
-          console.log(token_data.token);
-          var iframe = document.getElementById("vodiframe");
-          // note: need to use kkstream.io instead of original api base url
-          console.log("https://showroom.one-stage.kkstream.io/embed?token=" + token_data.token);
-          iframe.src = "https://showroom.one-stage.kkstream.io/embed?token=" + token_data.token;
-        }
-        callAsync();
       });
     </script>
 
+    <!--other js scripts-->
+    <script src="macro.js"></script>
+    <script src="function.js"></script>
+
+    <!--iframe-->
+    <div class="iframe-container">
+      <iframe id="vodiframe" src="" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <script>
+      // TODO: use async function to do all process
+      async function callAsync() {
+          // get vods' data
+          const vod_data = await getVod();
+          // get first vod's resource id
+          vod_id = vod_data.vods[0].id;
+          // get firs vod's token
+          const token_data = await getToken(vod_id);
+          // get iframe element in HTML
+          var iframe = document.getElementById("vodiframe");
+          // note: need to use kkstream.io instead of original api base url
+          //console.log("https://showroom.one-stage.kkstream.io/embed?token=" + token_data.token);
+          const showroom_base_url = "https://showroom.one-stage.kkstream.io/embed?token="
+          iframe.src = showroom_base_url + token_data.token;
+        }
+        callAsync();
+    </script>
+
+    <!-- show iframe -->
     <script>
       window.addEventListener('message', event => {
         if (event.data.command === 'ping') {
@@ -177,14 +138,6 @@
         }
       });
     </script>
-    <style>
-      .center-button {
-        text-align: center;
-      }
-      .center-button a {
-        display: inline-block;
-      }
-    </style>
     
     <div class="center-button">
       <a href="https://www.google.com">

@@ -1,7 +1,3 @@
-const api_base_url = 'https://api.one-stage.kkstream.io'
-const api_token = ''
-const org_id = 'e28bfe29-6bd1-425d-ad31-60b59ecd2028'
-
 function concat_url(base, path){
     return base + '/' + path;
 }
