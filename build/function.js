@@ -10,7 +10,7 @@ var get_resource = async function(name, resource_type){
   const type = resource_type == 'RESOURCE_TYPE_VOD' ? 'vods' : 'lives';
   const list_api = 'bv/cms/v1/' + type;
   const list_url = concat_url(api_base_url, list_api);
-  const list_queryParams = { current_page: 1, items_per_page: 1};
+  const list_queryParams = { current_page: 1, items_per_page: 10};
   const list_url_with_params = new URL(list_url);
   list_url_with_params.search = new URLSearchParams(list_queryParams).toString();    
   const list_options = {
@@ -25,8 +25,10 @@ var get_resource = async function(name, resource_type){
     const response = await fetch(list_url_with_params, list_options);
     const data = await response.json();
     // assume that vod has unique name
-    const vod = data.vods.find(obj => obj.name == name);
-    return vod;
+    console.log(type == 'vods' ? data.vods : data.lives);
+    console.log(name);
+    const resource = type == 'vods' ? data.vods.find(obj => obj.name == name) : data.lives.find(obj => obj.name == name);
+    return resource;
   } catch (error) {
     console.error(error);
   }
