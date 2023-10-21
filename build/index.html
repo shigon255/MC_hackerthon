@@ -46,7 +46,6 @@
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div>
     <p id="load">Firebase SDK Loading&hellip;</p>
-    <p id="vodtoken"></p>
     <iframe id="vodiframe" src="" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -160,7 +159,6 @@
           const token_data = await getToken(vod_id);
           console.log(token_data);
           console.log(token_data.token);
-          document.getElementById("vodtoken").textContent = token_data.token;
           var iframe = document.getElementById("vodiframe");
           // note: need to use kkstream.io instead of original api base url
           console.log("https://showroom.one-stage.kkstream.io/embed?token=" + token_data.token);
