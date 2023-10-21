@@ -2,7 +2,6 @@ function concat_url(base, path){
     return base + '/' + path;
 }
 
-// TODO: add live compability
 var get_resource = async function(name, resource_type){
   // get resource(vod/live) by it's name
   // name: resource name
@@ -25,8 +24,6 @@ var get_resource = async function(name, resource_type){
     const response = await fetch(list_url_with_params, list_options);
     const data = await response.json();
     // assume that vod has unique name
-    console.log(type == 'vods' ? data.vods : data.lives);
-    console.log(name);
     const resource = type == 'vods' ? data.vods.find(obj => obj.name == name) : data.lives.find(obj => obj.name == name);
     return resource;
   } catch (error) {

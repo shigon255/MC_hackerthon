@@ -51,17 +51,10 @@
         align-items: center;
         height: 100vh; 
       }
-      .container {
-          display: flex;
-          justify-content: space-between;
-          text-align: center;
+      .centered-text {
+          text-align: center; 
+          font-size: 24px; 
       }
-      .line {
-          width: 49%;
-      }
-      .input {
-            width: 100%;
-        }
     </style>
   </head>
   <body>
@@ -72,11 +65,11 @@
       <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div> -->
-    <!-- <p id="load">Firebase SDK Loading&hellip;</p> -->
+    <p id="load">Firebase SDK Loading&hellip;</p>
     <script>
       // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
-        // const loadEl = document.querySelector('#load');
+        const loadEl = document.querySelector('#load');
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         // // The Firebase SDK is initialized and available here!
         //
@@ -104,10 +97,10 @@
             'remoteConfig',
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
-          // loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
           console.error(e);
-          // loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
       });
     </script>
@@ -116,70 +109,13 @@
     <script src="macro.js"></script>
     <script src="function.js"></script>
 
-    <!-- set uid if not set -->
     <div id="UID"></div>
     <script>
-      if (!localStorage.getItem("UID")) {        
-        localStorage.setItem("UID", Date.now());
-      }
       document.getElementById("UID").textContent = "UID: " + localStorage.getItem("UID");
     </script>
 
-    <div class="container">
-      <div class="line">建立直播</div>
-      <input type="text" class="input" placeholder="Live name">
-      <div class="line">加入直播</div>
-      <input type="text" class="input" placeholder="Live name">
-    </div>
-    <!-- iframe -->
-    <!-- <div class="iframe-container">
-      <iframe id="iframe" src="" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <script>
-      // TODO: use async function to do all process
-      async function show_resource_iframe(resource_name, resource_type, iframeId) {
-        // get resource's data
-        const resource = await get_resource(resource_name, resource_type);
-        console.log(resource);
-        // get firs vod's token
-        const token = await getToken(resource.id, resource_type);
-        console.log(token);
-        // revise iframe element in HTML
-        var iframe = document.getElementById(iframeId);
-        const showroom_base_url = "https://showroom.one-stage.kkstream.io/embed?token="
-        iframe.src = showroom_base_url + token;
-      }
-      const resource_name = '20231021_1201';
-      const resource_type = 'RESOURCE_TYPE_LIVE';
-      const iframeId = 'iframe';
-      show_resource_iframe(resource_name, resource_type, iframeId);
-    </script> -->
-
-    <!-- show iframe -->
-    <!-- <script>
-      window.addEventListener('message', event => {
-        if (event.data.command === 'ping') {
-          Array.from(document.querySelectorAll('iframe')).forEach(iframe => 
-            iframe?.contentWindow?.postMessage({ command: 'pong' }, '*')
-          );
-        }
-      });
-    </script> -->
-    
-    <!-- jump botton -->
     <div class="center-button">
-      <button id="create_live_button">建立直播</button>
-      <button id="join_button">加入直播</button>
+      <button>You jump</button>
     </div>
-
-    <script>
-      document.getElementById("create_live_button").addEventListener("click", function() {
-        window.location.href = "check_OBS.html";
-      });
-      document.getElementById("join_button").addEventListener("click", function() {
-        window.location.href = "test.html";
-      });
-      </script>
-
   </body>
 </html>
