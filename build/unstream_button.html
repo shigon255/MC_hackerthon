@@ -3,44 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        dialog {
-            border: none;
-            box-shadow: 0 6px 10px #000000;
-            border-radius: 10px;
-            text-align: center;
-            height: 200px;
-        }
-        dialog::backdrop {
-            background-color: rgba(0, 0, 0, 0.1);
-        }
-        .close_button {
-            vertical-align: middle;
-        }
-    </style>
+    <link rel="stylesheet" href="./styles/Home_component_style.css">
 </head>
 <body>
-    <button id="show">Show</button>
+    <button onclick="doctorLeave()" id="show">Show</button>
     <dialog id="infoModal">
         <h1>Unstream OBS</h1>
         <p>Please make sure you've unstreamed OBS.</p>
-        <button class="close_button" id="close">Unstream</button>
+        <button id="close">Unstream</button>
     </dialog>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let btn = document.querySelector("#show");
-            let infoModal = document.querySelector("#infoModal");
-            let close = document.querySelector("#close");
-            
-            btn.addEventListener("click", function () {
-                infoModal.showModal();
-            });
-
-            close.addEventListener("click", function () {
-                infoModal.close();
-            });
-        });
-    </script>
+    <script src="component/Home_component.js"></script>
 </body>
 </html>
