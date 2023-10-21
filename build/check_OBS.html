@@ -58,6 +58,7 @@
     </style>
   </head>
   <body>
+
     <!-- Firebase message -->
     <!-- <div id="message">
       <h2>Welcome</h2>
@@ -65,11 +66,11 @@
       <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div> -->
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <!-- <p id="load">Firebase SDK Loading&hellip;</p> -->
     <script>
       // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
+        //const loadEl = document.querySelector('#load');
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         // // The Firebase SDK is initialized and available here!
         //
@@ -97,19 +98,30 @@
             'remoteConfig',
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+
+          // save_live
           const db = app.database();
+          console.log("test");
           db.ref("live_name").once("value")
           .then((snapshot) => {
             const data = snapshot.val();
-            console.log("一次性获取的数据：", data);
+            db.ref("live_name").remove();
+            async function create_live_and_save(){
+              const live = await create_live(data.live_name);
+              console.log(live);
+              console.log(JSON.stringify(live));
+              db.ref("live_" + localStorage.getItem("UID")).set(JSON.stringify(live));
+            }
+            create_live_and_save();
           })
           .catch((error) => {
-            console.error("获取数据时出错：", error);
+            console.error("Error:", error);
           });
+          
+          //loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
           console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+          //loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
       });
     </script>
@@ -124,14 +136,17 @@
     </script>
 
     <div class="centered-text">Stream OS</div>
-
-    <script>
-      // create live
-      
-    </script>
+    <div class="Please make sure you've stream to OBS">Stream OS</div>
 
     <div class="center-button">
-      <button>You jump</button>
+      <button id="start_live_button">開始直播</button>
     </div>
+
+    <script>
+      document.getElementById("start_live_button").addEventListener("click", function() {
+        window.location.href = "test.html";
+      });
+    </script>
+
   </body>
 </html>

@@ -22,7 +22,6 @@
       to avoid connecting the SDK to running emulators.
     -->
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
     <style media="screen">
       body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
       #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
@@ -72,11 +71,11 @@
       <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div> -->
-    <!-- <p id="load">Firebase SDK Loading&hellip;</p> -->
+    <p id="load">Firebase SDK Loading&hellip;</p>
     <script>
       // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
-        // const loadEl = document.querySelector('#load');
+        const loadEl = document.querySelector('#load');
         // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
         // // The Firebase SDK is initialized and available here!
         //
@@ -104,15 +103,16 @@
             'remoteConfig',
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
-          // loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
           console.error(e);
-          // loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
       });
     </script>
 
     <!--other js scripts-->
+    <!-- <script src="firebase_config.js" type="modules"></script> -->
     <script src="macro.js"></script>
     <script src="function.js"></script>
 
@@ -180,16 +180,12 @@
         const data = {
           live_name: live_name
         }
-        db.ref("live_name").set(data);
-        db.ref("live_name").once("value")
-        .then((snapshot) => {
-          const data = snapshot.val();
-          console.log("一次性获取的数据：", data);
-        })
-        .catch((error) => {
-          console.error("获取数据时出错：", error);
+        console.log(data);
+        db.ref("live_name").set(data).then(() => {
+          window.location.href = "check_OBS.html";
+        }).catch(error => {
+          console.error("写入数据时出错：", error);
         });
-        //window.location.href = "check_OBS.html";
       });
       document.getElementById("join_button").addEventListener("click", function() {
         window.location.href = "test.html";

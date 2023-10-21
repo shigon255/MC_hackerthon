@@ -59,3 +59,27 @@ var getToken = async function(resource_id, resource_type){
   }
 }
 
+var create_live = async function(live_name){
+  const create_live_api = 'bv/cms/v1/lives';
+  const url = concat_url(api_base_url, create_live_api);
+  const request_body = '{"live":{"broadcast_mode":"BROADCAST_MODE_TRADITIONAL_LIVE","name":"' + live_name + '","resolution":"LIVE_RESOLUTION_HD","security":{"privacy":{"type":"SECURITY_PRIVACY_TYPE_PUBLIC"}},"type":"LIVE_TYPE_LIVE"}}'
+  const options = {
+    method: 'POST',
+    headers: {
+      'x-bv-org-id': org_id,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      authorization: api_token
+    },
+    body: request_body
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
