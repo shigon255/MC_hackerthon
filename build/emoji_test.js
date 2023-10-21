@@ -18,6 +18,24 @@ const handleLoadWaiting = async () => {
     }, 500);
   });
 };
+function scoreExpression(expressions, scores){
+    //console.log(scores);
+    const max = Math.max.apply(null, scores);
+    if(scores[0] == max)
+    {
+      const neutral = scores.shift();
+      const second = Math.max.apply(null, scores);
+      if(max/second > 2 && second != 0)
+        return expressions[0];
+      else
+        return expressions[scores.findIndex((score) => score === second)]
+    }
+    else{
+      const index = scores.findIndex((score) => score === max);
+      return expressions[index];
+    }
+
+}
 export async function emoji(){
     await loadModels();
     await handleLoadWaiting();
@@ -33,8 +51,11 @@ export async function emoji(){
                 const scoresArray = Array.map((i) => i[1]);
                 const max = Math.max.apply(null, scoresArray);
                 const index = scoresArray.findIndex((score) => score === max);
-                const expression = expressionsArray[index];
+                const expression = scoreExpression(expressionsArray, scoresArray);
                 expressions.push(expression);
+                // const log = scoresArray.map((element, index)=>{
+                //   return `${expressionsArray[index]} : ${element}`
+                //});
             }
         }
     return expressions;
