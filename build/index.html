@@ -120,7 +120,6 @@
           try {
             const response = await fetch(urlWithParams, options);
             const data = await response.json();
-            console.log(data);
             return data;
           } catch (error) {
             console.error(error);
@@ -146,7 +145,6 @@
           try {
             const response = await fetch(url, options);
             const data = await response.json();
-            console.log(data);
             return data;
           } catch (error) {
             console.error(error);
@@ -155,7 +153,7 @@
         // TODO: use async function to do all process
         async function callAsync() {
           const vod_data = await getVod();
-          console.log(vod_data);
+          //console.log(vod_data);
           vod_id = vod_data.vods[0].id;
           console.log("vod_id");
           console.log(vod_id);

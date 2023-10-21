@@ -23,7 +23,6 @@ var getVod = async function(){
     try {
       const response = await fetch(urlWithParams, options);
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       console.error(error);
@@ -52,7 +51,6 @@ var getVod = async function(){
     try {
       const response = await fetch(url, options);
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       console.error(error);
