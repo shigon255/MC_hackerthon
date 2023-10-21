@@ -90,14 +90,13 @@
         // TODO: use async function to do all process
         async function callAsync() {
           const vod_data = await getVod();
-          console.log(vod_data);
+          //console.log(vod_data);
           vod_id = vod_data.vods[0].id;
           console.log("vod_id");
           console.log(vod_id);
           const token_data = await getToken(vod_id);
           console.log(token_data);
           console.log(token_data.token);
-          document.getElementById("vodtoken").textContent = token_data.token;
           var iframe = document.getElementById("vodiframe");
           // note: need to use kkstream.io instead of original api base url
           console.log("https://showroom.one-stage.kkstream.io/embed?token=" + token_data.token);
