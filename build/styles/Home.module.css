@@ -1,0 +1,44 @@
+.container {
+  min-height: 100vh;
+  padding: 0 0.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.header {
+  height: 80px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  display: table;
+  text-align: center;
+  width: 100%;
+}
+
+.header .title {
+  display: table-cell;
+  vertical-align: middle;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.main {
+  padding: 5rem 0;
+  position: relative;
+  flex: 1;
+  width: 100%;
+}
+
+.video {
+  position: absolute;
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  left: 0;
+  top: 20px;
+  right: 0;
+  margin: auto;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}

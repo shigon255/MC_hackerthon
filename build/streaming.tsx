@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
+import styles from "./styles/Home.module.css";
 import Webcam from "react-webcam";
 import * as faceapi from "face-api.js";
 import React from 'react'
@@ -85,19 +86,19 @@ export default function Home() {
 
   return (
     <>
-      <div>
+      <div className={styles.container}>
         <Head>
           <title>Face2Emoji</title>
           <meta name="description" content="Mask Emoji to your face" />
           <meta property="og:image" key="ogImage" content="/emojis/happy.png" />
           <link rel="icon" href="/emojis/happy.png" />
         </Head>
-        <header>
-          <h1>Face2Emoji</h1>
+        <header className={styles.header}>
+          <h1 className={styles.title}>Face2Emoji</h1>
         </header>
-        <main>
-          <Webcam audio={false} ref={webcamRef} />
-          <canvas ref={canvasRef}/>
+        <main className={styles.main}>
+          <Webcam audio={false} ref={webcamRef} className={styles.video} />
+          <canvas ref={canvasRef} className={styles.video} />
         </main>
       </div>
     </>
