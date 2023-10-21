@@ -98,6 +98,15 @@
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
           loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+          const db = app.database();
+          db.ref("live_name").once("value")
+          .then((snapshot) => {
+            const data = snapshot.val();
+            console.log("一次性获取的数据：", data);
+          })
+          .catch((error) => {
+            console.error("获取数据时出错：", error);
+          });
         } catch (e) {
           console.error(e);
           loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
@@ -112,6 +121,13 @@
     <div id="UID"></div>
     <script>
       document.getElementById("UID").textContent = "UID: " + localStorage.getItem("UID");
+    </script>
+
+    <div class="centered-text">Stream OS</div>
+
+    <script>
+      // create live
+      
     </script>
 
     <div class="center-button">

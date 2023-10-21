@@ -127,9 +127,9 @@
 
     <div class="container">
       <div class="line">建立直播</div>
-      <input type="text" class="input" placeholder="Live name">
+      <input type="text" class="input" placeholder="Live name" id="create_live_input">
       <div class="line">加入直播</div>
-      <input type="text" class="input" placeholder="Live name">
+      <input type="text" class="input" placeholder="Live name" id="join_live_input">
     </div>
     <!-- iframe -->
     <!-- <div class="iframe-container">
@@ -174,7 +174,22 @@
 
     <script>
       document.getElementById("create_live_button").addEventListener("click", function() {
-        window.location.href = "check_OBS.html";
+        const live_name = document.getElementById("create_live_input").value;
+        const app = firebase.app();
+        const db = app.database();
+        const data = {
+          live_name: live_name
+        }
+        db.ref("live_name").set(data);
+        db.ref("live_name").once("value")
+        .then((snapshot) => {
+          const data = snapshot.val();
+          console.log("一次性获取的数据：", data);
+        })
+        .catch((error) => {
+          console.error("获取数据时出错：", error);
+        });
+        //window.location.href = "check_OBS.html";
       });
       document.getElementById("join_button").addEventListener("click", function() {
         window.location.href = "test.html";
