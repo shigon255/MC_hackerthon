@@ -4,15 +4,20 @@
   <title>Other Page</title>
 </head>
 <body>
-  <h1>Welcome to the Other Page</h1>
 
-  <!-- 不需要再次初始化 Firebase SDK，直接使用已初始化的 Firebase SDK -->
+  
+  <iframe src="https://showroom.one-stage.kkstream.io/embed?token=eyJhbGciOiJSUzI1NiIsImtpZCI6IjE3N2RhODVjLTllZjgtNTVjYS05M2FkLTAyYTMyZjkwZjg2MyIsInR5cCI6IkpXVCJ9.eyJyZXNvdXJjZV9pZCI6IjhlNTZjYTE4LTViYzktNDc1MS1hYWIzLWQzODRmYzAwOWNlYyIsInJlc291cmNlX3R5cGUiOiJSRVNPVVJDRV9UWVBFX0xJVkVfRVZFTlQifQ.BSjKlydYGQuDEU9WiFgUX6TBktaD73m0I_d7kg7OerlnFUPXuPNNdp33F2uLJwG9F0VRqhV3nYoUZ-RoAErLxj12-G7ZUSNEyYQdqEgyCPdTTQcuDWIeG8q5lsAv4yPEqindREuJqyZifGFT5hZV09gx767ormbAT6wOqB66zrZHlr9PS3e_QYnMVn5ZROoLUinyXTejchs015GBx-dvBIj05clnSE6JGIKJNP-klHa9UyKO_oi4_OSasS4JM6nwTSmYH1GX-wUGrnoCwcu2VclbvzTfCa8vzmPiRrSOpI-B-JwrHQyfQNKthqLRp_V1szAfYntMH5GjKvs2tTzZEiNIAe1fcY7P-GQn2i4UigP7VwlbapA0nJ-H5Df3z9CJ5gmQlZJTJ8NeY6usXY1n91Wr-BW11ksMDcqKpw4hn2Jt5uB9pZEG8UX9hJZSMxTWujvbqXJMLfeKnRF4IcwYHvRcshvoYcOgreUTmZvIwRnM3vPseg-06YgjeOXglLZWZAWBXHDaEwZ-MLZlUecabAmXtjkgjaUmY0ET1zGs5UzuCk-uriv6SsjbnEavKBnfeQuEtc8k7O1t09H0X_1eRZJzDBNptdXrn8qLssuF4lvb5M5hu8LFFlLEMwsBW3eg9sM6Tpqy0MiXWNWMtNjsIt5v229WmU4OKZDVfuuFFsA" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
+  
   <script>
-    // 使用 Firebase SDK
-    const auth = firebase.auth();
-    const database = firebase.database();
-
-    // 在这里可以继续使用 Firebase 功能
+    window.addEventListener('message', event => {
+      if (event.data.command === 'ping') {
+        Array.from(document.querySelectorAll('iframe')).forEach(iframe => 
+          iframe?.contentWindow?.postMessage({ command: 'pong' }, '*')
+        );
+      }
+    });
   </script>
+  
+
 </body>
 </html>

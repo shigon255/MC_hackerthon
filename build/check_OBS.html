@@ -70,6 +70,7 @@
 
     <div class="centered-text" id="RMTP_URL">RMTP URL: Waiting...</div>
     <div class="centered-text" id="Stream_key">Stream key: Waiting...</div>
+    <div class="centered-text" id="can_start_stream"></div>
     <script>
       // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
@@ -209,8 +210,10 @@
             }
             console.log(localStorage.getItem("live_resource_id"));
             await start_live(localStorage.getItem("live_resource_id"))
+            document.getElementById("can_start_stream").textContent = 'You may start the stream';
             window.location.href = "live.html";
         }
+        document.getElementById("can_start_stream").textContent = 'You stream have not started, please wait...';
         check_status_and_jump();
       });
     </script>

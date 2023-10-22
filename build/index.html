@@ -71,6 +71,10 @@
       <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
       <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
     </div> -->
+    <div class="center-button">
+      <button id="create_live_button">建立直播</button>
+      <button id="join_button">加入直播</button>
+    </div>
     <p id="load">Firebase SDK Loading&hellip;</p>
     <script>
       // load firebase component
@@ -104,6 +108,42 @@
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
           loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+          
+          document.getElementById("create_live_button").addEventListener("click", function() {
+            const live_name = document.getElementById("create_live_input").value;
+            const app = firebase.app();
+            const db = app.database();
+            const data = {
+              live_name: live_name
+            }
+            console.log(data);
+            localStorage.setItem("live_name", live_name);
+            localStorage.setItem("live_owner_UID", localStorage.getItem("UID"));
+            window.location.href = "check_OBS.html";
+            // db.ref("live_name_" + localStorage.getItem("UID")).set(data.live_name).then(() => {
+            //   window.location.href = "check_OBS.html";
+            // }).catch(error => {
+            //   console.error("写入数据时出错：", error);
+            // });
+          });
+          document.getElementById("join_button").addEventListener("click", function() {
+            const app = firebase.app();
+            const db = app.database();
+            const live_name = document.getElementById("join_live_input").value;
+            localStorage.setItem("live_name", live_name);
+            console.log(live_name);
+            db.ref(live_name).once("value")
+            .then(snapshot => {
+              const jsonData = snapshot.val();
+              console.log(jsonData);
+              localStorage.setItem("live_owner_UID", jsonData.live_owner_UID);
+              localStorage.setItem("live_resource_id", jsonData.live_resource_id);
+              window.location.href = "live.html";
+            })
+            .catch(error => {
+              console.error("读取数据时出错：", error);
+            });
+          });
         } catch (e) {
           console.error(e);
           loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
@@ -167,44 +207,12 @@
     </script> -->
     
     <!-- jump botton -->
-    <div class="center-button">
-      <button id="create_live_button">建立直播</button>
-      <button id="join_button">加入直播</button>
-    </div>
 
-    <script>
-      document.getElementById("create_live_button").addEventListener("click", function() {
-        const live_name = document.getElementById("create_live_input").value;
-        // const app = firebase.app();
-        // const db = app.database();
-        // const data = {
-        //   live_name: live_name
-        // }
-        // console.log(data);
-        localStorage.setItem("live_name", live_name);
-        localStorage.setItem("live_owner_UID", localStorage.getItem("UID"));
-        window.location.href = "check_OBS.html";
-        // db.ref("live_name_" + localStorage.getItem("UID")).set(data.live_name).then(() => {
-        //   window.location.href = "check_OBS.html";
-        // }).catch(error => {
-        //   console.error("写入数据时出错：", error);
-        // });
-      });
-      document.getElementById("join_button").addEventListener("click", function() {
-        const live_name = document.getElementById("create_live_input").value;
-        localStorage.setItem("live_name", live_name);
-        db.ref(live_name).once("value")
-        .then(snapshot => {
-          const jsonData = snapshot.val();
-          localStorage.setItem("live_owner_UID", jsonData.live_owner_UID);
-          localStorage.setItem("live_resource_id", jsonData.live_resource_id);
-          window.location.href = "live.html";
-        })
-        .catch(error => {
-          console.error("读取数据时出错：", error);
-        });
-      });
-      </script>
+
+    <!-- <script>
+      const app = firebase.app();
+      const db = app.database();
+    </script> -->
 
   </body>
 </html>

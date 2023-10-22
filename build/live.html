@@ -68,15 +68,35 @@
     </div> -->
     <!-- <p id="load">Firebase SDK Loading&hellip;</p> -->
     <script src="component/Home_component.js"></script>   
-    <button class="center-button" id="quit">quit_button</button>
-    <dialog id="infoModal">
+    <button class="center-button" id="quit_button">quit_button</button>
+    
+    <div class="iframe-container">
+        <iframe id="iframe" src="" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div id="UID"></div>
+    <script>
+      document.getElementById("UID").textContent = "UID: " + localStorage.getItem("UID");
+    </script>
+
+    <div class="centered-text" id="Angry">Angry: </div>
+    <div class="centered-text" id="Disgusted">Disgusted: </div>
+    <div class="centered-text" id="Fearful">Fearful: </div>
+    <div class="centered-text" id="Happy">Happy: </div>
+    <div class="centered-text" id="Neutral">Neutral: </div>
+    <div class="centered-text" id="Sad">Sad: </div>
+    <div class="centered-text" id="Surprised">Surprised: </div>
+
+    <!-- <dialog id="infoModal">
         <h1>Unstream OBS</h1>
         <p>Please make sure you've unstreamed OBS.</p>
         <button id="close">Unstream</button>
     </dialog>
-    <div class="iframe-container">
-        <iframe id="iframe" src="" width="640" height="360" allow="autoplay; encrypted-media; clipboard-write" frameborder="0" allowfullscreen></iframe>
-    </div>
+    <dialog id="countdownModal">
+      <div>
+          <h1>Error!</h1>
+          <p>Take you back to console in <span id="countdown">5</span> seconds.</p>
+      </div>
+    </div> -->
     <script>
       // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
@@ -109,50 +129,59 @@
             'performance',
           ].filter(feature => typeof app[feature] === 'function');
           
+          const db = app.database();
+
           async function show_live_iframe(live_id){
             const token = await getToken(live_id, 'RESOURCE_TYPE_LIVE');
             var iframe = document.getElementById("iframe");
             const showroom_base_url = "https://showroom.one-stage.kkstream.io/embed?token="
             iframe.src = showroom_base_url + token;
+            console.log(document.getElementById("iframe").src);
+            console.log("---------------");
+            console.log(iframe.src);
+            console.log("---------------");
           }
           show_live_iframe(localStorage.getItem("live_resource_id"))
           //loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
+
+          //TODO: If patient, then add emoji
+          if(localStorage.getItem("live_owner_UID") != localStorage.getItem("UID")){
+            localStorage.setItem("expression", "neutral");
+            db.ref(localStorage.getItem("live_name")).child('Expression').child('neutral').transaction((currentValue) => {
+              // 在此处执行递增操作，比如加一
+              return (currentValue || 0) + 1;
+            })
+            .then((transactionResult) => {
+              if (transactionResult.committed) {
+                console.log("值递增成功");
+              } else {
+                console.error("值递增失败");
+              }
+            })
+            .catch((error) => {
+              console.error("递增时出错：", error);
+            });
+            
+          }
+
+          db.ref(localStorage.getItem("live_name")).child('Doctor_leave').on("value", (snapshot) => {
+            const data = snapshot.val();
+            console.log(data);
+            if(localStorage.getItem("live_owner_UID") != localStorage.getItem("UID")){
+              // Doctor leave, patient abort
+              if(data){
+                const result = confirm("Doctor end the live.");
+                openCountdownModal();
+              }
+            }
+          });
+          } catch (e) {
           console.error(e);
           //loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
         }
-
-        // button event listen
-        function quit_botton_listener() {
-          // 向 Firebase 写入数据
-          if(localStorage.getItem("live_owner_UID") == localStorage.getItem("UID"))
-          {
-              // Doctor leave
-              database.ref(localStorage.getItem("live_name")).child('Doctor_leave').set(true);
-              // End stream
-              
-              doctorLeave();
-          }
-          else{
-              // Patient leave
-          }
-        }
-
-        function addRealtimeDoctorLeaveListener() {
-          database.ref(localStorage.getItem("live_name")).child('Doctor_leave').on("value", (snapshot) => {
-            const data = snapshot.val();
-            // doctor leave
-          });
-        }
-
-        // 添加按钮点击事件监听
-        document.getElementById("quit_button").addEventListener("click", quit_botton_listener);
-
-        // 添加实时事件监听
-        addRealtimeDoctorLeaveListener();
       });
     </script>
-
+    
     <!-- show iframe -->
     <script>
       window.addEventListener('message', event => {
@@ -163,51 +192,55 @@
         }
       });
     </script>
+
+    <script>
+      // button event listen
+      function quit_botton_listener() {
+        console.log("testttttttt");
+        const app = firebase.app();
+        const db = app.database();
+        // 向 Firebase 写入数据
+        if(localStorage.getItem("live_owner_UID") == localStorage.getItem("UID"))
+        {
+            // Doctor leave
+            console.log("Doctor leave");
+            const result = confirm("Please make sure to end your stream");
+            db.ref(localStorage.getItem("live_name")).child('Doctor_leave').set(true);
+            // End stream
+            async function async_end_live(){
+              await end_live(localStorage.getItem("live_resource_id"));
+              window.location.href = "index.html";
+            }
+            async_end_live();
+            
+        }
+        else{
+            // Patient leave
+            db.ref(localStorage.getItem("live_name")).child('Expression').child(localStorage.getItem("expression")).transaction((currentValue) => {
+              // 在此处执行递增操作，比如加一
+              return (currentValue || 0) - 1;
+            })
+            .then((transactionResult) => {
+              if (transactionResult.committed) {
+                console.log("值递減成功");
+              } else {
+                console.error("值递減失败");
+              }
+            })
+            .catch((error) => {
+              console.error("递減时出错：", error);
+            });
+            window.location.href = "index.html";
+        }
+      }
+
+      // 添加按钮点击事件监听
+      document.getElementById("quit_button").addEventListener("click", quit_botton_listener );
+
+    </script>
+
     <!--other js scripts-->
     <script src="macro.js"></script>
     <script src="function.js"></script>
-
-    <div id="UID"></div>
-    <script>
-      document.getElementById("UID").textContent = "UID: " + localStorage.getItem("UID");
-    </script>
-
-    <div class="centered-text" id="Angry">Angry: </div>
-    <div class="centered-text" id="Disgusted">Disgusted: </div>
-    <div class="centered-text" id="Fearful">Fearful: </div>
-    <div class="centered-text" id="Happy">Happy: </div>
-    <div class="centered-text" id="Neutral">Neutral: </div>
-    <div class="centered-text" id="Sad">Sad: </div>
-    <div class="centered-text" id="Surprised">Surprised: </div>
-
-    <div class="center-button">
-      <button id="quit_button">結束</button>
-    </div>
-
-    <script>
-      document.getElementById("quit_button").addEventListener("click", function() {
-        async function check_status_and_jump(){
-            var cond = false;
-            while (!cond) {
-                console.log(localStorage.getItem("live_resource_id"))
-                const live = await get_resource_by_id(localStorage.getItem("live_resource_id"), 'RESOURCE_TYPE_LIVE');
-
-                if (live.status != 'LIVE_STATUS_PREVIEW') {
-                  console.log(Date.now());
-                  console.log(live);
-                  console.log(JSON.stringify(live));
-                  console.log(live.status);
-                  await new Promise(resolve => setTimeout(resolve, 5000)); // 等待 1 秒
-                } else {
-                  cond = true;
-                }
-            }
-            console.log(localStorage.getItem("live_resource_id"));
-            await start_live(localStorage.getItem("live_resource_id"))
-            window.location.href = "live.html";
-        }
-        check_status_and_jump();
-      });
-    </script>
   </body>
 </html>
