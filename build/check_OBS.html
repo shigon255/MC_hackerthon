@@ -68,8 +68,8 @@
     </div> -->
     <!-- <p id="load">Firebase SDK Loading&hellip;</p> -->
 
-    <div class="centered-text" id="RMTP_URL"></div>
-    <div class="centered-text" id="Stream_key"></div>
+    <div class="centered-text" id="RMTP_URL">RMTP URL: Waiting...</div>
+    <div class="centered-text" id="Stream_key">Stream key: Waiting...</div>
     <script>
       // load firebase component
       document.addEventListener('DOMContentLoaded', function() {
@@ -104,26 +104,67 @@
 
           // save_live
           const db = app.database();
-          console.log("test");
-          db.ref("live_name_" + localStorage.getItem("UID")).once("value")
-          .then((snapshot) => {
-            const data = snapshot.val();
-            async function create_live_and_save_and_get_id(){
-              // just used to save live name
-              db.ref("live_name_" + localStorage.getItem("UID")).remove();
-              const live = await create_live(data.live_name);
+
+          async function create_live_and_save_and_get_id(){
+              var live = await create_live(localStorage.getItem("live_name"));
+              var cond = false;
+              console.log(Date.now());
               console.log(live);
               console.log(JSON.stringify(live));
-              db.ref("live_" + localStorage.getItem("UID")).set(JSON.stringify(live));
-              document.getElementById("RMTP_URL").textContent = "RMTP URL: " + live.setup.rtmp.links.url;
-              document.getElementById("Stream_key").textContent = "Stream key: " + live.setup.rtmp.links.stream_key;
+              console.log(live.status);
+              while (!cond) {
+                  
+                  live = await get_resource_by_id(live.id, 'RESOURCE_TYPE_LIVE');
+
+                  console.log(Date.now());
+                  console.log(live);
+                  console.log(JSON.stringify(live));
+                  console.log(live.status);
+                  if (live.status != 'LIVE_STATUS_WAIT_FOR_PREVIEW' || live.setup == null) {
+                    await new Promise(resolve => setTimeout(resolve, 5000)); // 等待 1 秒
+                  } else {
+                    cond = true;
+                  }
+              }
+              console.log(live);
+              console.log(JSON.stringify(live));
+              console.log(live.id);
+              localStorage.setItem("live_resource_id", live.id);
+              db.ref(localStorage.getItem("live_name")).set({
+                  json_string: JSON.stringify(live),
+                  live_owner_UID: localStorage.getItem("live_owner_UID"),
+                  live_resource_id: live.id,
+                  Doctor_leave: false,
+                  Expression: {
+                    angry: 0,
+                    disgusted: 0,
+                    fearful: 0,
+                    happy: 0,
+                    neutral: 0,
+                    sad: 0,
+                    surprised: 0
+                  }
+              }).then(() => {
+                console.log("JSON 数据已成功写入 Firebase 实时数据库");
+              })
+              .catch(error => {
+                console.error("写入数据时出错：", error);
+              });
+              document.getElementById("RMTP_URL").textContent = "RMTP URL: " + live.setup.rtmp.links[0].url;
+              document.getElementById("Stream_key").textContent = "Stream key: " + live.setup.rtmp.links[0].stream_key;
+              await preview_live(live.id);
             }
-            const id = create_live_and_save_and_get_id();
-            localStorage.setItem("live_id_" + localStorage.getItem("UID"), id);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+            create_live_and_save_and_get_id();
+            
+
+          // db.ref("live_name_" + localStorage.getItem("UID")).once("value")
+          // .then((snapshot) => {
+          //   const data = snapshot.val();
+            
+          // })
+          // .catch((error) => {
+          //   console.error("Error:", error);
+          // });
           //loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
         } catch (e) {
           console.error(e);
@@ -141,8 +182,8 @@
       document.getElementById("UID").textContent = "UID: " + localStorage.getItem("UID");
     </script>
 
-    <div class="centered-text">Stream OS</div>
-    <div class="Please make sure you've stream to OBS">Stream OS</div>
+    <div class="centered-text">Stream OBS</div>
+    <div class="centered-text">Please make sure you've stream to OBS</div>
 
     <div class="center-button">
       <button id="start_live_button">開始直播</button>
@@ -151,12 +192,23 @@
     <script>
       document.getElementById("start_live_button").addEventListener("click", function() {
         async function check_status_and_jump(){
-            var status = 'LIVE_STATUS_UNSPECIFIED';
-            while (status != 'LIVE_STATUS_PREVIEW') {
-                const live = await get_resource("live_" + localStorage.getItem("UID"), 'RESOURCE_TYPE_LIVE');
-                status = live.status;
+            var cond = false;
+            while (!cond) {
+                console.log(localStorage.getItem("live_resource_id"))
+                const live = await get_resource_by_id(localStorage.getItem("live_resource_id"), 'RESOURCE_TYPE_LIVE');
+
+                if (live.status != 'LIVE_STATUS_PREVIEW') {
+                  console.log(Date.now());
+                  console.log(live);
+                  console.log(JSON.stringify(live));
+                  console.log(live.status);
+                  await new Promise(resolve => setTimeout(resolve, 5000)); // 等待 1 秒
+                } else {
+                  cond = true;
+                }
             }
-            const res = await start_live(localStorage.getItem("live_id_" + localStorage.getItem("UID")))
+            console.log(localStorage.getItem("live_resource_id"));
+            await start_live(localStorage.getItem("live_resource_id"))
             window.location.href = "live.html";
         }
         check_status_and_jump();

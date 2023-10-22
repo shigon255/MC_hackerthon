@@ -175,20 +175,34 @@
     <script>
       document.getElementById("create_live_button").addEventListener("click", function() {
         const live_name = document.getElementById("create_live_input").value;
-        const app = firebase.app();
-        const db = app.database();
-        const data = {
-          live_name: live_name
-        }
-        console.log(data);
-        db.ref("live_name_" + localStorage.getItem("UID")).set(data).then(() => {
-          window.location.href = "check_OBS.html";
-        }).catch(error => {
-          console.error("写入数据时出错：", error);
-        });
+        // const app = firebase.app();
+        // const db = app.database();
+        // const data = {
+        //   live_name: live_name
+        // }
+        // console.log(data);
+        localStorage.setItem("live_name", live_name);
+        localStorage.setItem("live_owner_UID", localStorage.getItem("UID"));
+        window.location.href = "check_OBS.html";
+        // db.ref("live_name_" + localStorage.getItem("UID")).set(data.live_name).then(() => {
+        //   window.location.href = "check_OBS.html";
+        // }).catch(error => {
+        //   console.error("写入数据时出错：", error);
+        // });
       });
       document.getElementById("join_button").addEventListener("click", function() {
-        window.location.href = "test.html";
+        const live_name = document.getElementById("create_live_input").value;
+        localStorage.setItem("live_name", live_name);
+        db.ref(live_name).once("value")
+        .then(snapshot => {
+          const jsonData = snapshot.val();
+          localStorage.setItem("live_owner_UID", jsonData.live_owner_UID);
+          localStorage.setItem("live_resource_id", jsonData.live_resource_id);
+          window.location.href = "live.html";
+        })
+        .catch(error => {
+          console.error("读取数据时出错：", error);
+        });
       });
       </script>
 

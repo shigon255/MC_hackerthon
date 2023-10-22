@@ -2,7 +2,31 @@ function concat_url(base, path){
     return base + '/' + path;
 }
 
-var get_resource = async function(name, resource_type){
+var get_resource_by_id = async function(resource_id, resource_type){
+  
+  const type = resource_type == 'RESOURCE_TYPE_VOD' ? 'vods' : 'lives';
+  const list_api = '/bv/cms/v1/' + type + '/' + resource_id;
+  const list_url = concat_url(api_base_url, list_api);
+  const list_options = {
+    method: 'GET',
+    headers: {
+      'x-bv-org-id': org_id,
+      Accept: 'application/json',
+      authorization: api_token
+    }
+  };
+  try {
+    const response = await fetch(list_url, list_options);
+    const data = await response.json();
+    console.log(data);
+    const resource = type == 'vods' ? data.vod : data.live;
+    return resource;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+var get_resource_by_name = async function(name, resource_type){
   // get resource(vod/live) by it's name
   // name: resource name
   // type: can be either 'RESOURCE_TYPE_VOD' or 'RESOURCE_TYPE_LIVE'
@@ -62,7 +86,7 @@ var getToken = async function(resource_id, resource_type){
 var create_live = async function(live_name){
   const create_live_api = 'bv/cms/v1/lives';
   const url = concat_url(api_base_url, create_live_api);
-  const request_body = '{"live":{"broadcast_mode":"BROADCAST_MODE_TRADITIONAL_LIVE","name":"' + live_name + '","resolution":"LIVE_RESOLUTION_HD","security":{"privacy":{"type":"SECURITY_PRIVACY_TYPE_PUBLIC"}},"type":"LIVE_TYPE_LIVE"}}'
+  const request_body = '{"live":{"broadcast_mode":"BROADCAST_MODE_TRADITIONAL_LIVE","name":"' + live_name + '","resolution":"LIVE_RESOLUTION_HD","security":{"privacy":{"type":"SECURITY_PRIVACY_TYPE_PUBLIC"}},"type":"LIVE_TYPE_LIVE", "metadata": {"long_description": "test"}}}'
   const options = {
     method: 'POST',
     headers: {
@@ -78,6 +102,30 @@ var create_live = async function(live_name){
     const response = await fetch(url, options);
     const data = await response.json();
     console.log(data);
+    return data.live;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+var preview_live = async function(live_id){
+  const preview_live_api = 'bv/cms/v1/lives/' + live_id + ':preview';
+  const url = concat_url(api_base_url, preview_live_api);
+  const options = {
+    method: 'POST',
+    headers: {
+      'x-bv-org-id': org_id,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      authorization: api_token
+    },
+    body: '{}'
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data);
     return data;
   } catch (error) {
     console.error(error);
@@ -86,6 +134,29 @@ var create_live = async function(live_name){
 
 var start_live = async function(live_id){
   const start_live_api = 'bv/cms/v1/lives/' + live_id + ':start';
+  const url = concat_url(api_base_url, start_live_api);
+  const options = {
+    method: 'POST',
+    headers: {
+      'x-bv-org-id': org_id,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+      authorization: api_token
+    },
+    body: '{}'
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+var end_live = async function(live_id){
+  const start_live_api = 'bv/cms/v1/lives/' + live_id + ':end';
   const url = concat_url(api_base_url, start_live_api);
   const options = {
     method: 'POST',
