@@ -15,6 +15,7 @@
 
 ## Future work
 + As mentioned before, Face detection api(face2emoji) have not yet be integrated.
++ Also, we want to apply react template to this project. We have done some part of the template(please refer to [this repo](https://github.com/aa35037123/medical_stream_filter_mchackathon)), but combination has not yet been done.
 
 ## Contributors
 + [@wujoe0415](https://github.com/wujoe0415) and [@aa35037123](https://github.com/aa35037123) contributed the usage of faceapi and react template. 
